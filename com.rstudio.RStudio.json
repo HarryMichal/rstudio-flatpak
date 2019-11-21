@@ -3,25 +3,45 @@
     "runtime" : "org.kde.Platform",
     "runtime-version" : "5.12",
     "sdk" : "org.kde.Sdk",
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.openjdk11",
+        "org.freedesktop.Sdk.Extension.texlive"
+    ],
     "command" : "rstudio",
+    "rename-icon" : "rstudio",
+    "rename-desktop-file" : "rstudio.desktop",
+    "finish-args" : [
+        "--socket=wayland",
+        "--share=ipc",
+        "--share=network",
+        "--filesystem=home",
+        "--talk-name=org.gnome.SessionManager",
+        "--device=dri",
+        "--env=PATH=/app/jre/bin:/usr/bin:/app/bin:/app/bin/x86_64-linux",
+        "--env=QTWEBENGINE_DISABLE_SANDBOX=1"
+    ],
+    "build-options" : {
+        "cflags" : "-O2",
+        "cxxflags" : "-O2",
+        "env" : {
+            "PATH" : "/usr/bin:/app/bin:/usr/lib/sdk/openjdk11/bin"
+        }
+    },
+    "cleanup" : [
+        "/include"
+    ],
     "modules" : [
         {
-            "name" : "R",
-            "buildsystem" : "autotools",
-            "config-opts" : [
-                "--enable-R-shlib=yes"
-            ],
-            "make-args" : [
-                "-j",
-                "-O"
-            ],
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://cloud.r-project.org/src/base/R-3/R-3.0.1.tar.gz",
-                    "sha256" : "af90488af3141103b211dc81b6f17d1f0faf4f17684c579a32dfeb25d0d87134"
-                }
+            "name": "texlive",
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "/usr/lib/sdk/texlive/install.sh"
             ]
+        },
+        {
+            "name" : "openjdk",
+            "buildsystem" : "simple",
+            "build-commands" : [ "/usr/lib/sdk/openjdk11/install.sh" ]
         },
         {
             "name" : "patchelf",
@@ -38,9 +58,8 @@
             "name" : "boost",
             "buildsystem" : "simple",
             "build-commands" : [
-                "./bootstrap.sh --prefix=/app --with-libraries=system",
-                "./b2 -j `nproc` install",
-                "./b2 install"
+                "./bootstrap.sh --without-libraries=python",
+                "./b2 --without-python --prefix=/app install -j $(nproc)"
             ],
             "sources" : [
                 {
@@ -51,35 +70,133 @@
             ]
         },
         {
-            "name": "boost",
+            "name" : "R",
+            "buildsystem" : "autotools",
+            "config-opts" : [
+                "--enable-R-shlib=yes"
+            ],
+            "make-args" : [
+                "-j",
+                "-O"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://cloud.r-project.org/src/base/R-3/R-3.5.1.tar.gz",
+                    "sha256" : "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed"
+                }
+            ]
+        },
+        {
+            "name" : "ant",
+            "cleanup": [
+                "*"
+            ],
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "mv ./bin/* /app/bin/",
+                "mkdir -p /app/etc",
+                "mv ./etc/* /app/etc/",
+                "mv ./lib/* /app/lib/"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.apache.org/dist/ant/binaries/apache-ant-1.9.14-bin.tar.gz",
+                    "sha256" : "ad6b296a76f0ad433bc6b4ebda41c3275e0dc03f0e9a6c8c299f787a5e4c3fe4"
+                }
+            ]
+        },
+        {
+            "name": "dictionaries",
             "buildsystem": "simple",
             "build-commands": [
-                "./bootstrap.sh --prefix=/app --with-libraries=system",
-                "./b2 -j `nproc` install",
-                "./b2 install"
+                "mkdir -p /app/local/rstudio_deps/common/dictionaries",
+                "mv ./* /app/local/rstudio_deps/common/dictionaries/"
             ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.gz",
-                    "sha256": "9a2c2819310839ea373f42d69e733c339b4e9a19deab6bfec448281554aa4dbb"
+                    "url": "https://s3.amazonaws.com/rstudio-buildtools/dictionaries/core-dictionaries.zip",
+                    "sha256": "4341a9630efb9dcf7f215c324136407f3b3d6003e1c96f2e5e1f9f14d5787494"
                 }
             ]
-        },  
+        },
+        {
+            "name": "mathjax",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/local/rstudio_deps/common/mathjax-26",
+                "mv ./* /app/local/rstudio_deps/common/"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip",
+                    "sha256": "939a2d7f37e26287970be942df70f3e8f272bac2eb868ce1de18bb95d3c26c71"
+                }
+            ]
+        },
+        {
+            "name": "pandoc",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/local/rstudio_deps/common/pandoc",
+                "mv ./bin/* /app/local/rstudio_deps/common/pandoc/"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://s3.amazonaws.com/rstudio-buildtools/pandoc/2.3.1/pandoc-2.3.1-linux.tar.gz",
+                    "sha256": "859609cdba5af61aefd7c93d174e412d6a38f5c1be90dfc357158638ff5e7059"
+                }
+            ]
+        },
+        {
+            "name": "renv",
+            "buildsystem": "simple",
+            "build-commands": [
+                "PACKAGE_SHA1=`git rev-parse master`",
+                "cat <<EOF >> DESCRIPTION\nGithubRepo: master\nGithubUsername: rstudio\nGithubRef: master\nGithubSHA1: $PACKAGE_SHA1\nOrigin: RStudioIDE\nEOF",
+                "R CMD build --no-build-vignettes .",
+                "cp ./renv*.tar.gz /app/local/rstudio_deps/common/"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/rstudio/renv.git",
+                    "branch" : "master"
+                }
+            ]
+        },
         {
             "name" : "RStudio",
             "buildsystem" : "cmake",
             "config-opts" : [
                 "-DRSTUDIO_TARGET=Desktop",
-                "-DRSTUDIO_PACKAGE_BUILD=1",
-                "-DCMAKE_BUILD_TYPE=Release",
-                "-DQT_QMAKE_EXECUTABLE=/usr/bin/qmake"
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_PREFIX=/app",
+                "-DQt5Core_DIR=/usr/lib/x86_64-linux-gnu/cmake/Qt5Core",
+                "-DQT_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu",
+                "-DQT_QMAKE_EXECUTABLE=/usr/bin/qmake",
+                "-DRSTUDIO_DEPENDENCIES_DIR=/app/local/rstudio_deps",
+                "-DRSTUDIO_INSTALL_FREEDESKTOP:BOOL=true",
+                "-DFLATPAK:BOOL=true"
             ],
+            "build-options" : {
+                "env": {
+                    "ANT_HOME" : "/app",
+                    "JAVA_HOME" : "/app/jre",
+                    "BOOST_ROOT" : "/app"
+                },
+                "append-path" : "$JAVA_HOME/bin:/usr/bin",
+                "append-ld-library-path" : "/usr/lib/x86_64-linux-gnu"
+            },
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://github.com/rstudio/rstudio/archive/v1.2.1335.tar.gz",
-                    "sha256" : "f124fbae68762d0a1fc9a7dc72ad290aebde768e262df87acda3883a07fdfd58"
+                    "type" : "git",
+                    "url" : "https://github.com/HarryMichal/rstudio.git",
+                    "branch" : "master"
                 }
             ]
         }
