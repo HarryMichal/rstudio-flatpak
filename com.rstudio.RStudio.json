@@ -4,8 +4,7 @@
     "runtime-version" : "5.12",
     "sdk" : "org.kde.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.openjdk11",
-        "org.freedesktop.Sdk.Extension.texlive"
+        "org.freedesktop.Sdk.Extension.openjdk11"
     ],
     "command" : "rstudio",
     "rename-icon" : "rstudio",
@@ -31,18 +30,6 @@
         "/include"
     ],
     "modules" : [
-        {
-            "name": "texlive",
-            "buildsystem" : "simple",
-            "build-commands" : [
-                "/usr/lib/sdk/texlive/install.sh"
-            ]
-        },
-        {
-            "name" : "openjdk",
-            "buildsystem" : "simple",
-            "build-commands" : [ "/usr/lib/sdk/openjdk11/install.sh" ]
-        },
         {
             "name" : "patchelf",
             "buildsystem" : "autotools",
@@ -174,7 +161,7 @@
             "buildsystem" : "cmake",
             "config-opts" : [
                 "-DRSTUDIO_TARGET=Desktop",
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_BUILD_TYPE=Release",
                 "-DCMAKE_INSTALL_PREFIX=/app",
                 "-DQt5Core_DIR=/usr/lib/x86_64-linux-gnu/cmake/Qt5Core",
                 "-DQT_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu",
@@ -186,7 +173,7 @@
             "build-options" : {
                 "env": {
                     "ANT_HOME" : "/app",
-                    "JAVA_HOME" : "/app/jre",
+                    "JAVA_HOME" : "/usr/lib/sdk/openjdk11/",
                     "BOOST_ROOT" : "/app"
                 },
                 "append-path" : "$JAVA_HOME/bin:/usr/bin",
