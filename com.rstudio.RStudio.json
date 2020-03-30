@@ -31,17 +31,6 @@
     ],
     "modules" : [
         {
-            "name" : "patchelf",
-            "buildsystem" : "autotools",
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.gz",
-                    "sha256" : "f2aa40a6148cb3b0ca807a1bf836b081793e55ec9e5540a5356d800132be7e0a"
-                }
-            ]
-        },
-        {
             "name" : "boost",
             "buildsystem" : "simple",
             "build-commands" : [
@@ -95,68 +84,6 @@
             ]
         },
         {
-            "name": "dictionaries",
-            "buildsystem": "simple",
-            "build-commands": [
-                "mkdir -p /app/local/rstudio_deps/common/dictionaries",
-                "mv ./* /app/local/rstudio_deps/common/dictionaries/"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://s3.amazonaws.com/rstudio-buildtools/dictionaries/core-dictionaries.zip",
-                    "sha256": "4341a9630efb9dcf7f215c324136407f3b3d6003e1c96f2e5e1f9f14d5787494"
-                }
-            ]
-        },
-        {
-            "name": "mathjax",
-            "buildsystem": "simple",
-            "build-commands": [
-                "mkdir -p /app/local/rstudio_deps/common/mathjax-26",
-                "mv ./* /app/local/rstudio_deps/common/"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip",
-                    "sha256": "939a2d7f37e26287970be942df70f3e8f272bac2eb868ce1de18bb95d3c26c71"
-                }
-            ]
-        },
-        {
-            "name": "pandoc",
-            "buildsystem": "simple",
-            "build-commands": [
-                "mkdir -p /app/local/rstudio_deps/common/pandoc",
-                "mv ./bin/* /app/local/rstudio_deps/common/pandoc/"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://s3.amazonaws.com/rstudio-buildtools/pandoc/2.3.1/pandoc-2.3.1-linux.tar.gz",
-                    "sha256": "859609cdba5af61aefd7c93d174e412d6a38f5c1be90dfc357158638ff5e7059"
-                }
-            ]
-        },
-        {
-            "name": "renv",
-            "buildsystem": "simple",
-            "build-commands": [
-                "PACKAGE_SHA1=`git rev-parse master`",
-                "cat <<EOF >> DESCRIPTION\nGithubRepo: master\nGithubUsername: rstudio\nGithubRef: master\nGithubSHA1: $PACKAGE_SHA1\nOrigin: RStudioIDE\nEOF",
-                "R CMD build --no-build-vignettes .",
-                "cp ./renv*.tar.gz /app/local/rstudio_deps/common/"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/rstudio/renv.git",
-                    "branch" : "master"
-                }
-            ]
-        },
-        {
             "name" : "RStudio",
             "buildsystem" : "cmake",
             "config-opts" : [
@@ -166,7 +93,6 @@
                 "-DQt5Core_DIR=/usr/lib/x86_64-linux-gnu/cmake/Qt5Core",
                 "-DQT_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu",
                 "-DQT_QMAKE_EXECUTABLE=/usr/bin/qmake",
-                "-DRSTUDIO_DEPENDENCIES_DIR=/app/local/rstudio_deps",
                 "-DRSTUDIO_INSTALL_FREEDESKTOP:BOOL=true",
                 "-DFLATPAK:BOOL=true"
             ],
@@ -182,8 +108,26 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/HarryMichal/rstudio.git",
-                    "branch" : "master"
+                    "url" : "https://github.com/HarryMichal/rstudio",
+                    "tag" : "master"
+                },
+                {
+                    "type": "archive",
+                    "url": "https://s3.amazonaws.com/rstudio-buildtools/dictionaries/core-dictionaries.zip",
+                    "sha256": "4341a9630efb9dcf7f215c324136407f3b3d6003e1c96f2e5e1f9f14d5787494",
+                    "dest": "dependencies/common/dictionaries"
+                },
+                {
+                    "type": "archive",
+                    "url": "https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip",
+                    "sha256": "939a2d7f37e26287970be942df70f3e8f272bac2eb868ce1de18bb95d3c26c71",
+                    "dest": "dependencies/common/mathjax-26"
+                },
+                {
+                    "type": "archive",
+                    "url": "https://s3.amazonaws.com/rstudio-buildtools/pandoc/2.3.1/pandoc-2.3.1-linux.tar.gz",
+                    "sha256": "859609cdba5af61aefd7c93d174e412d6a38f5c1be90dfc357158638ff5e7059",
+                    "dest": "dependencies/common/pandoc"
                 }
             ]
         }
