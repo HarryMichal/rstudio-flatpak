@@ -86,6 +86,7 @@
             "name" : "RStudio",
             "buildsystem" : "cmake",
             "config-opts" : [
+                "-DFLATPAK:BOOL=true",
                 "-DRSTUDIO_TARGET=Desktop",
                 "-DRSTUDIO_INSTALL_FREEDESKTOP:BOOL=true",
                 "-DCMAKE_BUILD_TYPE=Release",
@@ -102,6 +103,10 @@
                     "type" : "git",
                     "url" : "https://github.com/HarryMichal/rstudio",
                     "tag" : "master"
+                },
+                {
+                    "type": "patch",
+                    "path": "0001-When-built-as-flatpak-change-freedesktop-prefix.patch"
                 },
                 {
                     "type": "archive",
