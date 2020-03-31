@@ -16,7 +16,6 @@
         "--filesystem=home",
         "--talk-name=org.gnome.SessionManager",
         "--device=dri",
-        "--env=PATH=/app/jre/bin:/usr/bin:/app/bin:/app/bin/x86_64-linux",
         "--env=QTWEBENGINE_DISABLE_SANDBOX=1"
     ],
     "build-options" : {
@@ -88,22 +87,15 @@
             "buildsystem" : "cmake",
             "config-opts" : [
                 "-DRSTUDIO_TARGET=Desktop",
+                "-DRSTUDIO_INSTALL_FREEDESKTOP:BOOL=true",
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-DCMAKE_INSTALL_PREFIX=/app",
-                "-DQt5Core_DIR=/usr/lib/x86_64-linux-gnu/cmake/Qt5Core",
-                "-DQT_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu",
-                "-DQT_QMAKE_EXECUTABLE=/usr/bin/qmake",
-                "-DRSTUDIO_INSTALL_FREEDESKTOP:BOOL=true",
-                "-DFLATPAK:BOOL=true"
+                "-DQT_QMAKE_EXECUTABLE=/usr/bin/qmake"
             ],
             "build-options" : {
                 "env": {
-                    "ANT_HOME" : "/app",
-                    "JAVA_HOME" : "/usr/lib/sdk/openjdk11/",
-                    "BOOST_ROOT" : "/app"
-                },
-                "append-path" : "$JAVA_HOME/bin:/usr/bin",
-                "append-ld-library-path" : "/usr/lib/x86_64-linux-gnu"
+                    "JAVA_HOME" : "/usr/lib/sdk/openjdk8"
+                }
             },
             "sources" : [
                 {
