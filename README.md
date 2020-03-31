@@ -1,11 +1,25 @@
 # RStudio - flatpak
-This is a work-in-progress repo with flatpak manifests that are used to build RStudio
+
+This is a work-in-progress repo with flatpak manifests that are used to build
+RStudio
 
 ## Current state
-It builds with the "current" master (currently I use my own fork with patches on top of latest master) but it's not tested with current releases.
+
+It builds with the latest release (1.2.5033) and possibly with 'master'.
+
+The manifest for the latest releases is in the 'release' branch.
+
+A patch has to be applied to RStudio because during the build freedesktop files
+have a hardcoded install path (/usr/share/...). Flatpak changes the prefix to
+/app.
+
+## Known problems
+
+- Packages cannot be built for lack of gcc, g++ and overall a package manager
+- No git, subversion support
 
 ## TODO
-- cleanup - I didn't bother with cleaning up the build process, so there's a lot of bloat
-- yaml version - some people don't like json
-- tracking of releases - this version is tracking master, not releases
-  - this'll require some major changes, because the RStudio releases are behind master by hundreds of commits
+
+- Add gcc extension
+- Bundle git/subversion?
+- Try to figure out how to fix the problem with the environment
