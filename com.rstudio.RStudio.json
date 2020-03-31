@@ -23,7 +23,12 @@
         "cxxflags" : "-O2"
     },
     "cleanup" : [
-        "/include"
+        "/extras",
+        "/include",
+        "/lib64/pkgconfig",
+        "/share/man",
+        "*.la",
+        "*.a"
     ],
     "modules" : [
         {
