@@ -4,7 +4,7 @@
     "runtime-version" : "5.12",
     "sdk" : "org.kde.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.openjdk11"
+        "org.freedesktop.Sdk.Extension.openjdk8"
     ],
     "command" : "rstudio",
     "rename-icon" : "rstudio",
@@ -20,10 +20,7 @@
     ],
     "build-options" : {
         "cflags" : "-O2",
-        "cxxflags" : "-O2",
-        "env" : {
-            "PATH" : "/usr/bin:/app/bin:/usr/lib/sdk/openjdk11/bin"
-        }
+        "cxxflags" : "-O2"
     },
     "cleanup" : [
         "/include"
