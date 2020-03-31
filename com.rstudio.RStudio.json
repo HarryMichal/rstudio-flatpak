@@ -90,6 +90,9 @@
                 "-DCMAKE_INSTALL_PREFIX=/app",
                 "-DQT_QMAKE_EXECUTABLE=/usr/bin/qmake"
             ],
+            "make-args" : [
+                "-j16"
+            ],
             "build-options" : {
                 "env": {
                     "JAVA_HOME" : "/usr/lib/sdk/openjdk8"
