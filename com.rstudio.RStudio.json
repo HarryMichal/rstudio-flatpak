@@ -84,6 +84,24 @@
             ]
         },
         {
+            "name" : "extra-files",
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "install -m a+rx git-wrapper.sh /app/bin/git",
+                "install -m a+rx svn-wrapper.sh /app/bin/svn"
+            ],
+            "sources" : [
+                {
+                    "type" : "file",
+                    "path" : "git-wrapper.sh"
+                },
+                {
+                    "type" : "file",
+                    "path" : "svn-wrapper.sh"
+                }
+            ]
+        },
+        {
             "name" : "R",
             "buildsystem" : "autotools",
             "config-opts" : [
