@@ -3,9 +3,13 @@
     "runtime" : "org.kde.Platform",
     "runtime-version" : "5.12",
     "sdk" : "org.kde.Sdk",
-    "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.openjdk8"
-    ],
+    "add-build-extensions" : {
+        "org.freedesktop.Sdk.Extension.openjdk8" : {
+            "directory" : "/lib/openjdk8",
+            "version" : "19.08",
+            "versions" : "19.08;18.08"
+        }
+    },
     "command" : "rstudio",
     "rename-icon" : "rstudio",
     "rename-desktop-file" : "rstudio.desktop",
@@ -69,6 +73,11 @@
                 "-j",
                 "-O"
             ],
+            "build-options" : {
+                "env" : {
+                    "JAVA_HOME" : "/app/lib/openjdk8"
+                }
+            },
             "sources" : [
                 {
                     "type" : "archive",
@@ -113,7 +122,7 @@
             ],
             "build-options" : {
                 "env": {
-                    "JAVA_HOME" : "/usr/lib/sdk/openjdk8",
+                    "JAVA_HOME" : "/app/lib/openjdk8",
                     "RSTUDIO_VERSION_MAJOR" : "1",
                     "RSTUDIO_VERSION_MINOR" : "2",
                     "RSTUDIO_VERSION_PATCH" : "5033",
