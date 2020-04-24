@@ -81,8 +81,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://cloud.r-project.org/src/base/R-3/R-3.5.1.tar.gz",
-                    "sha256" : "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed"
+                    "url" : "https://cloud.r-project.org/src/base/R-3/R-3.6.3.tar.gz",
+                    "sha256" : "89302990d8e8add536e12125ec591d6951022cf8475861b3690bc8bf1cefaa8f"
                 }
             ]
         },
