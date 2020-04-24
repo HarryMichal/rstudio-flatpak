@@ -49,6 +49,26 @@
     ],
     "modules" : [
         {
+            "name" : "ant",
+            "cleanup": [
+                "*"
+            ],
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "mkdir -p /app/bin /app/etc /app/lib",
+                "mv ./bin/* /app/bin/",
+                "mv ./etc/* /app/etc/",
+                "mv ./lib/* /app/lib/"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.apache.org/dist/ant/binaries/apache-ant-1.9.14-bin.tar.gz",
+                    "sha256" : "ad6b296a76f0ad433bc6b4ebda41c3275e0dc03f0e9a6c8c299f787a5e4c3fe4"
+                }
+            ]
+        },
+        {
             "name" : "boost",
             "buildsystem" : "simple",
             "build-commands" : [
@@ -84,26 +104,6 @@
                     "type" : "archive",
                     "url" : "https://cloud.r-project.org/src/base/R-3/R-3.6.3.tar.gz",
                     "sha256" : "89302990d8e8add536e12125ec591d6951022cf8475861b3690bc8bf1cefaa8f"
-                }
-            ]
-        },
-        {
-            "name" : "ant",
-            "cleanup": [
-                "*"
-            ],
-            "buildsystem" : "simple",
-            "build-commands" : [
-                "mv ./bin/* /app/bin/",
-                "mkdir -p /app/etc",
-                "mv ./etc/* /app/etc/",
-                "mv ./lib/* /app/lib/"
-            ],
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://www.apache.org/dist/ant/binaries/apache-ant-1.9.14-bin.tar.gz",
-                    "sha256" : "ad6b296a76f0ad433bc6b4ebda41c3275e0dc03f0e9a6c8c299f787a5e4c3fe4"
                 }
             ]
         },
