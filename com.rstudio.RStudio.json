@@ -67,6 +67,7 @@
             "name" : "R",
             "buildsystem" : "autotools",
             "config-opts" : [
+                "--prefix=/app",
                 "--enable-R-shlib=yes"
             ],
             "make-args" : [
